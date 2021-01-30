@@ -11,11 +11,6 @@ require('dotenv').config();
 
 const app = express();
 
-
-// dotenv
-//https://www.npmjs.com/package/crypto-js
-//https://github.com/motdotla/dotenv
-
 mongoose.connect(process.env.DB_URI,
 {
     useNewUrlParser: true,
