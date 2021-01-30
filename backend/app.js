@@ -7,9 +7,16 @@ const path = require('path');
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 
+require('dotenv').config();
+
 const app = express();
 
-mongoose.connect('mongodb+srv://Gony_:Megane1.5dci@go-fullstack.s6ez5.mongodb.net/go-fullstack?retryWrites=true&w=majority',
+
+// dotenv
+//https://www.npmjs.com/package/crypto-js
+//https://github.com/motdotla/dotenv
+
+mongoose.connect(process.env.DB_URI,
 {
     useNewUrlParser: true,
     useUnifiedTopology: true
