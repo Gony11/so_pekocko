@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const passwordValidator = require('password-validator');
 const emailValidator = require('email-validator');
 
+const cryptoJs = require('crypto-js');
+
 const User = require('../models/User');
 
 exports.signup = (req, res, next) => {
@@ -19,10 +21,13 @@ exports.signup = (req, res, next) => {
 
     if(passwordSchema.validate(req.body.password) && emailValidator.validate(req.body.email)) {
 
+        require('dotenv').config();
+        let encryptEmail = cryptoJs.HmacMD5(req.body.email, process.env.SALT_EMAIL).toString()
+
         bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
-                email: req.body.email,
+                email: encryptEmail,
                 password: hash
             });
             
@@ -43,7 +48,11 @@ exports.signup = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+
+    require('dotenv').config();
+    let encryptEmail = cryptoJs.HmacMD5(req.body.email, process.env.SALT_EMAIL).toString()
+
+    User.findOne({ email: encryptEmail })
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });
